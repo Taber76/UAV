@@ -42,7 +42,7 @@ function updateHeatmap (matrix){
 
 
 const thermal = async () => {
-  await fetch(`http://192.168.1.18:8080/thermal`, {
+  await fetch(`http://192.168.1.7:8080/thermal`, {
   })
   .then(response => response.json())
   .then(data => {

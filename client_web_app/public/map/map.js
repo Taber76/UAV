@@ -11,35 +11,6 @@ async function createMap() {
 
   mymap = L.map('map').setView([-34.7737, -55.8279], 17) // --------- crea mapa
 
-      // Add baselayer
-    /*  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19
-      }).addTo(mymap)*/
-  
-      // Add geographical labels only layer on top of baselayer
-  /*    var labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19,
-        pane: 'shadowPane'  // always display on top
-      }).addTo(mymap)*/
-      
-
-
-
- /* L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', // ------ capa basica openstreetmap
-    {
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      maxZoom: 18,
-      tileSize: 512,
-      zoomOffset: -1,
-      accessToken: 'your.mapbox.access.token'
-    }
-  ).addTo(mymap)*/
 
   const bingLayer = L.tileLayer.bing({ //----------------------------- crea capa terreno
     bingMapsKey: "AjfnsByYOk_tdufEWpdpE9PLJ_Wlz0vTia_5FZzhKstX5sWKMXEc4wPgGUQsSQvx",
@@ -90,7 +61,7 @@ async function createMap() {
 async function refreshMap () {
   
   let newUbication
-  await fetch(`http://192.168.1.18:8080/pix`, {
+  await fetch(`http://192.168.1.7:8080/pix`, {
     })
     .then(response => response.json())
     .then(data => newUbication = data)

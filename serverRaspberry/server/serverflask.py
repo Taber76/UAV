@@ -1,77 +1,32 @@
 # Librerias server
-from flask import Flask, jsonify, request
-from flask_cors import cross_origin
+from flask import Flask
 
-import json
-import sys
-sys.path.append("./PixhawkCommunication")
 
-# Libreria Drone
-from pymavlink import mavutil
-
-# Librerias Thermal camera
-import time
-import board
-import busio
-import adafruit_mlx90640
-import matplotlib.pyplot as plt
-import numpy as np
-
-# Librerias propias
-from PixhawkCommunication.pixCom import getPixParameters, pixPort 
-from ThermalCamera.thermalCamera import getThermalFrame
-
+# Modulos
+from Pixhawk.pixCom import connect_uav 
+from ThermalCamera.thermalCamera import connect_thermal_camera
+from Sim7600.sim7600Com import connect_sim
+from Routes.pixRoute import get_pix
+from Routes.thermalRoute import get_thermal
 
 # ----------------------------------------------------------------
 # Crea conexion UAV
-master = mavutil.mavlink_connection(pixPort(), baud=9600)
+master = connect_uav()
 
-# Espera a que se establezca la conexión
-master.wait_heartbeat()
-print('UAV conactado en puerto '+ pixPort())
-
-# -----------------------------------------------------------------
 # Crea conexion camara termica
-i2c = busio.I2C(board.SCL, board.SDA, frequency=800000)
+mlx, thermalFrame = connect_thermal_camera()
 
-mlx = adafruit_mlx90640.MLX90640(i2c)
-print("MLX addr detected on I2C", [hex(i) for i in mlx.serial_number])
-
-# if using higher refresh rates yields a 'too many retries' exception,
-# try decreasing this value to work with certain pi/camera combinations
-mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_2_HZ #2
-thermalFrame = np.zeros((24*32,))
-
+connect_sim()
 
 # -----------------------------------------------------------------
-# SERVIDOR
+# Routes
 app = Flask(__name__)
-
-
-# Manejador de solicitudes
-# datos pixhawk
-@app.route('/pix', methods=['GET'])
-@cross_origin()
-def get_pix():
-    pixParam = getPixParameters(master)
-    print(pixParam)
-    return { 'lat' : pixParam.lat,
-             'lon' : pixParam.lon,
-             'alt' : pixParam.alt,
-             'heading' : pixParam.hdg / 100
-            }
-
-# captura camara termica
-@app.route('/thermal', methods=['GET'])
-@cross_origin()
-def get_thermal():
-    thermalImageArray = getThermalFrame (mlx, thermalFrame)
-    return { 'thermalImageArray' : thermalImageArray.tolist()}
+app.add_url_rule('/pix', view_func=get_pix, defaults={'master': master})
+app.add_url_rule('/thermal', view_func=get_thermal, defaults={'mlx': mlx, 'thermalFrame': thermalFrame})
 
 
 
-# inicio Servidor
+# Inicio Servidor
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
-
 

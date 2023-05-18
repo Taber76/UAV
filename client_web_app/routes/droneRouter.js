@@ -9,7 +9,7 @@ const config = require('../config/environment')
 droneRouter.get(
   '/status',
   async (req, res) => {
-    await fetch(`http://${config.ipaddress}:8080/pix`, {
+    await fetch(`http://${config.ipaddress}:8000/pix`, {
     })
     .then(resoponse => resoponse.json())
     .then(data => {
@@ -23,7 +23,7 @@ droneRouter.get(
 droneRouter.get(
   '/thermalimage',
   async (req, res) => {
-    await fetch(`http://${config.ipaddress}:8080/thermal`, {
+    await fetch(`http://${config.ipaddress}:8000/thermal`, {
     })
     .then(resoponse => resoponse.json())
     .then(data => {

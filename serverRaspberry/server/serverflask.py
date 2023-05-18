@@ -1,28 +1,37 @@
 # Librerias server
 from flask import Flask
 
+# Routes modules
+from Routes.pixRoute import pixhawkRoutes
+from Routes.thermalRoute import thermalRoutes
 
-# Modulos
+# Modules
 from Pixhawk.pixCom import connect_uav 
 from ThermalCamera.thermalCamera import connect_thermal_camera
 from Sim7600.sim7600Com import connect_sim
-from Routes.pixRoute import get_pix
-from Routes.thermalRoute import get_thermal
 
 # ----------------------------------------------------------------
-# Crea conexion UAV
+# UAV CONNECT
 master = connect_uav()
 
-# Crea conexion camara termica
+# THERMAL CAMERA
 mlx, thermalFrame = connect_thermal_camera()
 
+# SIM COM
 connect_sim()
 
 # -----------------------------------------------------------------
-# Routes
+# ROUTES
 app = Flask(__name__)
-app.add_url_rule('/pix', view_func=get_pix, defaults={'master': master})
-app.add_url_rule('/thermal', view_func=get_thermal, defaults={'mlx': mlx, 'thermalFrame': thermalFrame})
+
+# /pix
+app.config['MASTER'] = master
+app.register_blueprint(pixhawkRoutes, url_prefix='/pix')
+
+# /thermal
+app.config['MLX'] = mlx
+app.config['THERMAL_FRAME'] = thermalFrame
+app.register_blueprint(thermalRoutes, url_prefix='/thermal')
 
 
 

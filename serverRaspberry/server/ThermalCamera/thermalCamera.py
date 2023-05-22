@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-############### FUNCIONES
+############### FUNCIONESpytho
 
 def getThermalFrame (mlx, frame):
     mlx.getFrame(frame)

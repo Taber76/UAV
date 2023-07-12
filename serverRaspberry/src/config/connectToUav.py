@@ -3,6 +3,7 @@ from serial.tools import list_ports
 
 from pymavlink import mavutil
 
+
 def getUavPort():
     ports = list_ports.comports()
     for port in ports:
@@ -15,19 +16,22 @@ def getUavPort():
                 pass
     return None
 
-isConnected = False
 
-def connectToUav():
-    global isConnected
-    if not isConnected:
-      try:
-    # master = mavutil.mavlink_connection(pixPort(), baud=9600) # Raspberry <-> UAV
-        master = mavutil.mavlink_connection('COM4', baud=9600)      # PC <-> UAV
-        master.wait_heartbeat()
-        print('--> UAV connected')
-      # print('UAV conectado en puerto '+ pixPort())
-        isConnected = True
-        return master
-      except Exception as e:
-        print(f'Error al conectar con UAV: {e}')
-        return None
+uav_connected = False
+
+
+def connect_to_uav():
+    global uav_connected
+    if not uav_connected:
+        try:
+            # master = mavutil.mavlink_connection(pixPort(), baud=9600) # Raspberry <-> UAV
+            master = mavutil.mavlink_connection(
+                'COM4', baud=9600)      # PC <-> UAV
+            master.wait_heartbeat()
+            print('--> UAV connected')
+        # print('UAV conectado en puerto '+ pixPort())
+            isConnected = True
+            return master
+        except Exception as e:
+            print(f'Error al conectar con UAV: {e}')
+            return None

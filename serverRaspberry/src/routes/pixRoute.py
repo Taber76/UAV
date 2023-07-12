@@ -4,26 +4,12 @@ import asyncio
 
 from controllers.pixhawkController import *
 
-
 pixhawkRoutes = Blueprint('pixhawkRoutes', __name__)
 
-# GET number msgs
-#@cross_origin()
-#@pixhawkRoutes.route('/msg', methods=['GET'])
-#async def get_all_msgs():
-#    number = 10
-#    master = current_app.config.get('MASTER')
-#    if master:
-#        loop = asyncio.get_event_loop()
-#        result = await loop.run_in_executor(None, get_pix_msg_controller, master, number)
-#        return jsonify(result)
-#    else:
-#        return jsonify({'error': 'No se pudo conectar con UAV'})
 
-
-# GET msg_type in max_time
+# GET mesasage /pix?msg_type=ACK&max_time=10
 @cross_origin()
-@pixhawkRoutes.route('/', methods=['GET'])
+@pixhawkRoutes.route('/pix', methods=['GET'])
 async def get_uav_msg_route():
     msg_type = request.args.get('msg_type')
     max_time = int(request.args.get('max_time'))
@@ -35,8 +21,9 @@ async def get_uav_msg_route():
         return jsonify({'error': 'No se pudo conectar con UAV'})
 
 
+# PUT arm /pix/arm?arm=1
 @cross_origin()
-@pixhawkRoutes.route('/arm', methods=['PUT'])
+@pixhawkRoutes.route('/pix/arm', methods=['PUT'])
 async def arm_uav_route():
     arm = int(request.args.get('arm'))  # Arm (arm = 1) / Disarm (arm = 0)
     try:
@@ -47,8 +34,9 @@ async def arm_uav_route():
         return jsonify({'error': 'No se pudo armar UAV'})
 
 
+# PUT takeoff /pix/takeoff {"launch_angle": 0, "latitude": 0, "longitude": 0, "altitude": 0}
 @cross_origin()
-@pixhawkRoutes.route('/takeoff', methods=['POST'])
+@pixhawkRoutes.route('/pix/takeoff', methods=['PUT'])
 async def takeoff_uav_route():
     request_data = await request.json  # Obtener los datos del cuerpo de la solicitud
     launch_angle = int(request_data.get('launch_angle'))
@@ -63,12 +51,40 @@ async def takeoff_uav_route():
         return jsonify({'error': 'No se pudo takeoff UAV'})
 
 
+# POST add waypoint /pix/waypoint {"lat": 0, "lon": 0, "alt": 0}
+@cross_origin()
+@pixhawkRoutes.route('/pix/waypoint', methods=['POST'])
+async def go_to_waypoint():
+    data = request.get_json()
+    lat = data.get('lat')
+    lon = data.get('lon')
+    alt = data.get('alt')
+    try:
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(None, go_to_waypoint_controller, lat, lon, alt)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': 'No se pudo conectar con UAV'})
+
+
+# GET number msgs
+# @cross_origin()
+# @pixhawkRoutes.route('/msg', methods=['GET'])
+# async def get_all_msgs():
+#    number = 10
+#    master = current_app.config.get('MASTER')
+#    if master:
+#        loop = asyncio.get_event_loop()
+#        result = await loop.run_in_executor(None, get_pix_msg_controller, master, number)
+#        return jsonify(result)
+#    else:
+#        return jsonify({'error': 'No se pudo conectar con UAV'})
 
 
 # POST Add WAYPOINT
-#@cross_origin()
-#@pixhawkRoutes.route('/', methods=['POST'])
-#async def add_waypoint():
+# @cross_origin()
+# @pixhawkRoutes.route('/', methods=['POST'])
+# async def add_waypoint():
 #    data = request.get_json()
 #    lat = data.get('lat')
 #    lon = data.get('lon')
@@ -80,37 +96,3 @@ async def takeoff_uav_route():
 #        return jsonify(result)
 #    else:
 #        return jsonify({'error': 'No se pudo conectar con UAV'})
-
-
-
-
-
-'''
-COMANDOS
-7 params each:
-example: master.mav.command_long_send(
-            master.target_system, master.target_component,
-            mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, -------> command
-            0,                                            -------> 0 first confirmation
-            0, 0, 0, 0, 0, 0, 0                           -------> params
-        )
-
-    MAV_CMD_NAV_WAYPOINT: Navigate to the specified position
-    MAV_CMD_NAV_LOITER_UNLIM: Loiter at the specified location for an unlimited amount of time
-    MAV_CMD_NAV_RETURN_TO_LAUNCH: Return to launch or nearest rally point
-    MAV_CMD_JUMP_TAG: Jump to location 1 to 65535
-    MAV_CMD_DO_CHANGE_SPEED: Change the speed
-    MAV_CMD_DO_SET_HOME: Set home
-    MAV_CMD_DO_SET_SERVO: Set servo
-    MAV_CMD_DO_REPEAT_SERVO: Repeat servo movement
-    MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW: Gimbal manager
-    MAV_CMD_MISSION_START (300 ): Empezar a ejecutar una misión
-    MAV_CMD_DO_SET_MISSION_CURRENT (224 ):Establezca el elemento de misión con el número de secuencia seq como el elemento actual y emita MISSION_CURRENT (independientemente de si el número de misión cambió o no).
-
-    
-MENSAJES
-example: master.recv_match() recibir
-
-master.mav.send(message)
-
-'''

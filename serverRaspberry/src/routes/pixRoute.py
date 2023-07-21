@@ -21,78 +21,69 @@ async def get_uav_msg_route():
         return jsonify({'error': 'No se pudo conectar con UAV'})
 
 
-# PUT arm /pix/arm?arm=1
+# POST message to UAV ex: {'message': 'MAV_CMD_NAV_TAKEOFF', 'param1': 15, 'param2': 0, 'param3': 0, 'param4': yaw, 'param5': lat, 'param6': lon, 'param7': alt}
 @cross_origin()
-@pixhawkRoutes.route('/pix/arm', methods=['PUT'])
-async def arm_uav_route():
-    arm = int(request.args.get('arm'))  # Arm (arm = 1) / Disarm (arm = 0)
+@pixhawkRoutes.route('/pix', methods=['POST'])
+async def post_uav_msg_route():
     try:
+        request_data = request.get_json()
         loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(None, arm_uav_controller, arm)
+        result = await loop.run_in_executor(None, post_uav_msg_controller, request_data)
+        # {'response': True, 'message': json_msg} o {'response': False, 'message': 'Timeout'}
         return jsonify(result)
     except Exception as e:
-        return jsonify({'error': 'No se pudo armar UAV'})
+        error_message = str(e)
+        return jsonify({'error': 'No se pudo enviar comando a UAV', 'error_message': error_message})
 
+'''
+POST MESSAGE TYPES
+    
+    ARM / DISARM
+        MAV_CMD_COMPONENT_ARM_DISARM
+        1, Arming o 0 -> Disarming
+        21196, forced or 0 unforced
+        0, 0, 0, 0, 0 Ignored
+    
+    TAKEOFF
+        MAV_CMD_NAV_TAKEOFF
+        15, Minimum Pitch angle (degrees)
+        0, 0, Ignored
+        yaw (degrees), Yaw angle
+        lat, lon, alt (m)
+    
+    LAND
+        MAV_CMD_NAV_LAND
+        15, Abort landing altitude
+        0, Mode landing 0:normal
+        0, Ignored
+        yaw (degrees), Yaw angle
+        lat, lon, alt (m ground level)
 
-# PUT takeoff /pix/takeoff {"launch_angle": 0, "latitude": 0, "longitude": 0, "altitude": 0}
-@cross_origin()
-@pixhawkRoutes.route('/pix/takeoff', methods=['PUT'])
-async def takeoff_uav_route():
-    request_data = await request.json  # Obtener los datos del cuerpo de la solicitud
-    launch_angle = int(request_data.get('launch_angle'))
-    latitude = float(request_data.get('latitude'))
-    longitude = float(request_data.get('longitude'))
-    altitude = float(request_data.get('altitude'))
-    try:
-        loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(None, takeoff_uav_controller, launch_angle, latitude, longitude, altitude)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({'error': 'No se pudo takeoff UAV'})
+    GO TO WAYPOINT
+        MAV_CMD_DO_REPOSITON
+        10, Speed (m/s)
+        0, 0, 0, Ignored
+        lat, lon, alt (m)
 
+    SPEED
+        MAV_CMD_DO_CHANGE_SPEED
+        1, Type of change: 1 for ground speed
+        speed (m/s), or -1 no change, -2 return to default
+        throttle (%), or -1 no change, -2 return to default
+        0, 0, 0, 0 Ignored
 
-# POST add waypoint /pix/waypoint {"lat": 0, "lon": 0, "alt": 0}
-@cross_origin()
-@pixhawkRoutes.route('/pix/waypoint', methods=['POST'])
-async def go_to_waypoint():
-    data = request.get_json()
-    lat = data.get('lat')
-    lon = data.get('lon')
-    alt = data.get('alt')
-    try:
-        loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(None, go_to_waypoint_controller, lat, lon, alt)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({'error': 'No se pudo conectar con UAV'})
+    SET NEW HOME
+        MAV_CMD_DO_SET_HOME
+        0, 1 use current position, 0 use specified location
+        0, 0, 0 Ignored
+        lat, lon, alt (m)
 
+    MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT
+    MAV_CMD_DO_FOLLOW
+    MAV_CMD_NAV_LOITER_UNLIM
+    MAV_CMD_NAV_RETURN_TO_LAUNCH
+    MAV_CMD_DO_SET_SERVO: Set servo
+    MAV_CMD_DO_REPEAT_SERVO: Repeat servo movement
+    MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW: Gimbal manager
 
-# GET number msgs
-# @cross_origin()
-# @pixhawkRoutes.route('/msg', methods=['GET'])
-# async def get_all_msgs():
-#    number = 10
-#    master = current_app.config.get('MASTER')
-#    if master:
-#        loop = asyncio.get_event_loop()
-#        result = await loop.run_in_executor(None, get_pix_msg_controller, master, number)
-#        return jsonify(result)
-#    else:
-#        return jsonify({'error': 'No se pudo conectar con UAV'})
-
-
-# POST Add WAYPOINT
-# @cross_origin()
-# @pixhawkRoutes.route('/', methods=['POST'])
-# async def add_waypoint():
-#    data = request.get_json()
-#    lat = data.get('lat')
-#    lon = data.get('lon')
-#    alt = data.get('alt')
-#    master = current_app.config.get('MASTER')
-#    if master:
-#        loop = asyncio.get_event_loop()
-#        result = await loop.run_in_executor(None, add_waypoint_controller, master, lat, lon, alt)
-#        return jsonify(result)
-#    else:
-#        return jsonify({'error': 'No se pudo conectar con UAV'})
+'''

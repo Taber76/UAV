@@ -11,6 +11,19 @@ def get_uav_msg_controller(msgType, maxTime):
         pass
 
 
+def post_uav_msg_controller(request_data):
+    param1 = int(request_data['param1'])
+    param2 = int(request_data['param2'])
+    param3 = int(request_data['param3'])
+    param4 = int(request_data['param4'])
+    param5 = int(request_data['param5'])
+    param6 = int(request_data['param6'])
+    param7 = int(request_data['param7'])
+    command = Pixhawk.get_message(
+        request_data['message'], param1, param2, param3, param4, param5, param6, param7)
+    return command
+
+
 # Arm UAV -> Arm (arm = 1) / Disarm (arm = 0)
 def arm_uav_controller(arm):
     # verificacion valor de arm

@@ -1,5 +1,5 @@
-/varios
-/client_web_app/node_modules
-/reactdrone/node_modules
-/serverRaspberry/server/example
-/pymavlink-master
+/clientWebApp/node_modules
+/clientWebApp/public/node_modules
+/clientReact/node_modules
+/clientReact/public/node_modules
+/serverCloud/node_modules

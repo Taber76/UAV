@@ -3,3 +3,5 @@
 /clientReact/node_modules
 /clientReact/public/node_modules
 /serverCloud/node_modules
+
+/serverCloud/.env

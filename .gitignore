@@ -1,7 +1,7 @@
 /clientWebApp/node_modules
 /clientWebApp/public/node_modules
 /clientReact/node_modules
-/clientReact/public/node_modules
+/clientReact/vite.config.js
 /serverCloud/node_modules
 /serverCloud/.env
 /serverCloud

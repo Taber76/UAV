@@ -1,6 +1,6 @@
 ![Badge en Desarollo](https://img.shields.io/badge/STATUS-DEVELOPING-yellow)
 
-![Badge en Desarollo](https://img.shields.io/badge/PIXHAWK-grey) ![Badge en Desarollo](https://img.shields.io/badge/RASPBERRY%20PI-magenta)  ![Badge en Desarollo](https://img.shields.io/badge/PYTHON-blue) ![Badge en Desarollo](https://img.shields.io/badge/NODEJS-green) ![Badge en Desarollo](https://img.shields.io/badge/REACT-cyan)  ![Badge en Desarollo](https://img.shields.io/badge/FLASK-red) ![Badge en Desarollo](https://img.shields.io/badge/EXPRESS-blue) ![Badge en Desarollo](https://img.shields.io/badge/MONGODB-green)
+![Badge en Desarollo](https://img.shields.io/badge/PIXHAWK-grey) ![Badge en Desarollo](https://img.shields.io/badge/RASPBERRY%20PI-magenta)  ![Badge en Desarollo](https://img.shields.io/badge/PYTHON-blue) ![Badge en Desarollo](https://img.shields.io/badge/NODEJS-green) ![Badge en Desarollo](https://img.shields.io/badge/REACT-cyan)  ![Badge en Desarollo](https://img.shields.io/badge/FLASK-red) ![Badge en Desarollo](https://img.shields.io/badge/NEST-blue) ![Badge en Desarollo](https://img.shields.io/badge/MONGODB-green)
 # UAV
 UAV for fire fighting
 

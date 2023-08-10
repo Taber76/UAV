@@ -1,18 +1,26 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-
-import { PixhawkModule } from './pixhawk/pixhawk.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { GlobalService } from './global/global.service';
+import { UavModule } from './uav/uav.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://taber:Aa000001@coderhouse.xfpha7a.mongodb.net/test',
-    ),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URL'),
+      }),
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    PixhawkModule,
+    UavModule,
+    UserModule,
   ],
+  providers: [GlobalService],
 })
-export class AppModule {}
+export class AppModule { }
+

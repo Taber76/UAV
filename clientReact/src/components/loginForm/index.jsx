@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { Button, Input } from '../index.js'
+import { ButtonComp, InputComp } from '../index.js'
 
 import './styles.css'
 //import swal from 'sweetalert'
@@ -33,17 +33,17 @@ const LoginForm = () => {
       //return swal('Completar!', 'Password!', 'warning')
     }
     const response = await axios.post(
-      'http://localhost:8080/api/users/login',
+      'http://localhost:3000/api/user/login',
       {
         username: data.Username,
-        clave: data.Password
+        password: data.Password
       }
     )
-    if (response.status === 200) {
-      localStorage.setItem("jwtToken", response.data.token);
-      navigate('/students')
+    if (response.status === 201) {
+      //localStorage.setItem("jwtToken", response.data.token);
+      navigate('/main')
     } else {
-      //return swal('Error!', 'Usuario o contraseña incorrectos!', 'error')
+      return swal('Error!', 'Usuario o contraseña incorrectos!', 'error')
     }
   }
 
@@ -69,9 +69,9 @@ const LoginForm = () => {
 
   return (
     <form className='formLogin' onSubmit={handleOnSubmit}>
-      <Input name='Username' type='text' onChange={onChange} warning={warningUsername} />
-      <Input name='Password' type='password' onChange={onChange} warning={warningPassword} />
-      <Button name='Login' type='submit' />
+      <InputComp name='Username' type='text' onChange={onChange} warning={warningUsername} />
+      <InputComp name='Password' type='password' onChange={onChange} warning={warningPassword} />
+      <ButtonComp name='Login' type='submit' />
     </form>
   )
 }

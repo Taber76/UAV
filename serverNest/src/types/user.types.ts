@@ -5,3 +5,8 @@ export interface UserData {
   password: string;
   role: string;
 }
+
+export interface UserLog {
+  username: string;
+  password: string;
+}

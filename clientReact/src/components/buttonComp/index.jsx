@@ -1,6 +1,6 @@
 import './styles.css'
 
-const Button = ({ type, name }) => {
+const ButtonComp = ({ type, name }) => {
   return (
     <div className='divButtonsContainer'>
       <div className='divBackgroundButtons' />
@@ -9,4 +9,4 @@ const Button = ({ type, name }) => {
   )
 }
 
-export default Button
+export default ButtonComp

@@ -3,7 +3,7 @@ import './styles.css'
 import { ShowPass } from '../index'
 import Warning from '../../assets/react.svg'
 
-const Input = ({ type, name, onChange, warning }) => {
+const InputComp = ({ type, name, onChange, warning }) => {
   // show muestra la contraseña cuando es true.
   // se establece en null para evitar enfocar los input en cuanto se renderice la pagina.
   const [show, setShow] = useState(null)
@@ -93,4 +93,4 @@ const Input = ({ type, name, onChange, warning }) => {
   )
 }
 
-export default Input
+export default InputComp

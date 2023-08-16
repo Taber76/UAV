@@ -1,0 +1,14 @@
+.mainContainer {
+  background-color: rgba(31, 27, 27, 0.267);
+}
+
+.mapContainer {
+  position: relative;
+  z-index: 0;
+}
+
+.statusBarContainer {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}

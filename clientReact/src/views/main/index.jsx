@@ -1,9 +1,15 @@
-import { MapComponent } from "../../components"
+import { MapComponent, StatusBar } from "../../components"
+import './styles.css'
 
 const Main = () => {
   return(
-    <div>
-      <MapComponent />
+    <div className="mainContainer">
+      <div className="statusBarContainer">
+        <StatusBar />
+      </div>
+      <div className="mapContainer">
+        <MapComponent />
+      </div>
     </div>
   )
 }

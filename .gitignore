@@ -6,4 +6,4 @@
 /serverCloud
 /serverNest/node_modules
 /serverNest/.env
-/serverNest/dist
+#/serverNest/dist

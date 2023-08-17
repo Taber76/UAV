@@ -6,6 +6,8 @@ import './styles.css'
 //import swal from 'sweetalert'
 import { useEffect, useState } from 'react'
 
+const apiUrl = import.meta.env.VITE_API_URL
+
 const LoginForm = () => {
   const [data, setData] = useState({
     Username: '',
@@ -33,7 +35,7 @@ const LoginForm = () => {
       //return swal('Completar!', 'Password!', 'warning')
     }
     const response = await axios.post(
-      'http://localhost:3000/api/user/login',
+      `${apiUrl}/user/login`,
       {
         username: data.Username,
         password: data.Password

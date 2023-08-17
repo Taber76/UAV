@@ -16,6 +16,8 @@ export class UavService {
     private readonly globalService: GlobalService,
   ) { }
 
+  // ------ UAV ------
+
   async longCommand(data: LongCommand) {
     const response = await fetch(`${this.globalService.uavUrl}/pix`, {
       method: 'POST',
@@ -28,6 +30,22 @@ export class UavService {
     const jsonresponse = await response.json();
     return jsonresponse;
   }
+
+  async getStatus() {
+    const response = await fetch(`${this.globalService.uavUrl}/pix?msg_type=SYS_STATUS&max_time=5`);
+    const jsonresponse = await response.json();
+    // actualizar globalService
+    return
+  }
+
+  async getMessage(string) {
+    const response = await fetch(`${this.globalService.uavUrl}/pix?${string}`);
+    const jsonresponse = await response.json();
+    return jsonresponse;
+  }
+
+
+  // ------ DATABASE ------
 
   async register(uav: Uav) {
     uav.password = await bcrypt.hash(uav.password, 10);
@@ -48,4 +66,7 @@ export class UavService {
       return { response: true };
     }
   }
+
+
+
 }

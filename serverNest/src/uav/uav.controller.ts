@@ -4,6 +4,8 @@ import {
   Body,
   HttpStatus,
   HttpException,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { UavService } from './uav.service';
 import { UavConnection, UavData, UavJwt } from 'src/types/uav.types';
@@ -49,8 +51,30 @@ export class UavController {
     }
   }
 
+  @Get('clientconnect')
+  async getUavUrl(@Query() name: string): Promise<any> {
+    try {
+      if (name === this.globalService.uavName) {
+        return {
+          result: true,
+        }
+      }
+      return {
+        result: false,
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('status')
+  async getStatus(): Promise<any> {
+    this.uavService.getStatus();
+    return this.globalService;
+  }
+
   // From UAV
-  @Post('connect')
+  @Post('uavconnect')
   async connect(@Body() data: UavConnection): Promise<any> {
     try {
       const response = await this.uavService.uavConection(
@@ -59,6 +83,7 @@ export class UavController {
       );
       if (response.response === true) {
         this.globalService.uavUrl = data.url;
+        this.globalService.uavName = data.uavname;
         return { response: true };
       } else {
         return {

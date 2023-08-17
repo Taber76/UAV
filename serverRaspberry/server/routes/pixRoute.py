@@ -21,7 +21,7 @@ async def get_uav_msg_route():
         return jsonify({'error': 'No se pudo conectar con UAV'})
 
 
-# POST message to UAV ex: {'message': 'MAV_CMD_NAV_TAKEOFF', 'param1': 15, 'param2': 0, 'param3': 0, 'param4': yaw, 'param5': lat, 'param6': lon, 'param7': alt}
+# POST long message to UAV ex: {'message': 'MAV_CMD_NAV_TAKEOFF', 'param1': 15, 'param2': 0, 'param3': 0, 'param4': yaw, 'param5': lat, 'param6': lon, 'param7': alt}
 @cross_origin()
 @pixhawkRoutes.route('/pix', methods=['POST'])
 async def post_uav_msg_route():

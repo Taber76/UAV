@@ -16,14 +16,16 @@ exports.UavController = void 0;
 const common_1 = require("@nestjs/common");
 const uav_service_1 = require("./uav.service");
 const global_service_1 = require("../global/global.service");
+const uav_model_1 = require("./uav.model");
 let UavController = exports.UavController = class UavController {
     constructor(uavService, globalService) {
         this.uavService = uavService;
         this.globalService = globalService;
+        this.uavInstances = {};
     }
     async longCommand(data) {
         try {
-            const response = await this.uavService.longCommand(data);
+            const response = await this.uavInstances[data.uavname].longCommand(data);
             if (response.response === true) {
                 const jsonmessage = JSON.parse(response.message);
                 return {
@@ -40,6 +42,9 @@ let UavController = exports.UavController = class UavController {
             throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    async getStatus(uavname) {
+        return this.uavInstances[uavname].getStatus();
+    }
     async register(data) {
         try {
             const response = await this.uavService.register(data);
@@ -48,6 +53,9 @@ let UavController = exports.UavController = class UavController {
         catch (error) {
             throw new common_1.HttpException({ response: false, error }, common_1.HttpStatus.BAD_REQUEST);
         }
+    }
+    async list() {
+        return this.uavInstances;
     }
     async getUavUrl(name) {
         try {
@@ -64,22 +72,18 @@ let UavController = exports.UavController = class UavController {
             throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    async getStatus() {
-        this.uavService.getStatus();
-        return this.globalService;
-    }
-    async connect(data) {
+    async connect(data, ip) {
         try {
             const response = await this.uavService.uavConection(data.uavname, data.password);
             if (response.response === true) {
-                this.globalService.uavUrl = data.url;
+                const newUAVInsance = new uav_model_1.UAV(data.uavname, data.url);
+                this.uavInstances[data.uavname] = newUAVInsance;
+                this.globalService.uavUrl = ip;
                 this.globalService.uavName = data.uavname;
                 return { response: true };
             }
             else {
-                return {
-                    response: false,
-                };
+                return { response: false };
             }
         }
         catch {
@@ -104,12 +108,25 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UavController.prototype, "longCommand", null);
 __decorate([
+    (0, common_1.Get)('status'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UavController.prototype, "getStatus", null);
+__decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UavController.prototype, "register", null);
+__decorate([
+    (0, common_1.Get)('list'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UavController.prototype, "list", null);
 __decorate([
     (0, common_1.Get)('clientconnect'),
     __param(0, (0, common_1.Query)()),
@@ -118,16 +135,11 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UavController.prototype, "getUavUrl", null);
 __decorate([
-    (0, common_1.Get)('status'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UavController.prototype, "getStatus", null);
-__decorate([
     (0, common_1.Post)('uavconnect'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Ip)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UavController.prototype, "connect", null);
 __decorate([

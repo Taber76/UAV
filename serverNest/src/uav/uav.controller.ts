@@ -6,23 +6,29 @@ import {
   HttpException,
   Get,
   Query,
+  Ip
 } from '@nestjs/common';
 import { UavService } from './uav.service';
 import { UavConnection, UavData, UavJwt } from 'src/types/uav.types';
 import { GlobalService } from 'src/global/global.service';
+import { UAV } from './uav.model';
+
 
 @Controller('api/uav')
 export class UavController {
+  private uavInstances: { [key: string]: UAV } = {}
+
   constructor(
     private readonly uavService: UavService,
     private readonly globalService: GlobalService,
   ) { }
 
-  // From client
+  // FROM CLIENT TO UAV -------------------------------------------------------
+  // Long command to UAV
   @Post('longcommand')
   async longCommand(@Body() data: any): Promise<any> {
     try {
-      const response = await this.uavService.longCommand(data);
+      const response = await this.uavInstances[data.uavname].longCommand(data);
       if (response.response === true) {
         const jsonmessage = JSON.parse(response.message);
         return {
@@ -41,6 +47,13 @@ export class UavController {
     }
   }
 
+  @Get('status')
+  async getStatus(@Query() uavname: string): Promise<any> {
+    return this.uavInstances[uavname].getStatus();
+  }
+
+  // FROM CLIENT TO THIS SERVER -------------------------------------------------
+  // Register UAV
   @Post('register')
   async register(@Body() data: UavData): Promise<any> {
     try {
@@ -51,7 +64,15 @@ export class UavController {
     }
   }
 
-  @Get('clientconnect')
+  // List of UAVs connected
+  @Get('list')
+  async list(): Promise<any> {
+    return this.uavInstances;
+  }
+
+
+
+  @Get('clientconnect') // en que estaba pensando?
   async getUavUrl(@Query() name: string): Promise<any> {
     try {
       if (name === this.globalService.uavName) {
@@ -67,28 +88,24 @@ export class UavController {
     }
   }
 
-  @Get('status')
-  async getStatus(): Promise<any> {
-    this.uavService.getStatus();
-    return this.globalService;
-  }
 
-  // From UAV
+  // FROM UAV --------------------------------------------------------------------
+  // Power on connection
   @Post('uavconnect')
-  async connect(@Body() data: UavConnection): Promise<any> {
+  async connect(@Body() data: UavConnection, @Ip() ip: string): Promise<any> {
     try {
       const response = await this.uavService.uavConection(
         data.uavname,
         data.password,
       );
       if (response.response === true) {
-        this.globalService.uavUrl = data.url;
+        const newUAVInsance = new UAV(data.uavname, data.url) //,data.jwt);
+        this.uavInstances[data.uavname] = newUAVInsance;
+        this.globalService.uavUrl = ip;
         this.globalService.uavName = data.uavname;
         return { response: true };
       } else {
-        return {
-          response: false,
-        };
+        return { response: false };
       }
     } catch {
       throw new HttpException({ response: false }, HttpStatus.BAD_REQUEST);

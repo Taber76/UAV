@@ -18,34 +18,11 @@ const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
 const uav_schema_1 = require("./uav.schema");
 const global_service_1 = require("../global/global.service");
-const node_fetch_1 = require("node-fetch");
 const bcrypt = require("bcrypt");
 let UavService = exports.UavService = class UavService {
     constructor(uavModel, globalService) {
         this.uavModel = uavModel;
         this.globalService = globalService;
-    }
-    async longCommand(data) {
-        const response = await (0, node_fetch_1.default)(`${this.globalService.uavUrl}/pix`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: this.globalService.jwtUav
-            },
-            body: JSON.stringify(data),
-        });
-        const jsonresponse = await response.json();
-        return jsonresponse;
-    }
-    async getStatus() {
-        const response = await (0, node_fetch_1.default)(`${this.globalService.uavUrl}/pix?msg_type=SYS_STATUS&max_time=5`);
-        const jsonresponse = await response.json();
-        return;
-    }
-    async getMessage(string) {
-        const response = await (0, node_fetch_1.default)(`${this.globalService.uavUrl}/pix?${string}`);
-        const jsonresponse = await response.json();
-        return jsonresponse;
     }
     async register(uav) {
         uav.password = await bcrypt.hash(uav.password, 10);

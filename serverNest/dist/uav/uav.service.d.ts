@@ -25,14 +25,10 @@
 import { Model } from 'mongoose';
 import { Uav } from './uav.schema';
 import { GlobalService } from 'src/global/global.service';
-import { LongCommand } from 'src/types/uav.types';
 export declare class UavService {
     private readonly uavModel;
     private readonly globalService;
     constructor(uavModel: Model<Uav>, globalService: GlobalService);
-    longCommand(data: LongCommand): Promise<any>;
-    getStatus(): Promise<void>;
-    getMessage(string: any): Promise<any>;
     register(uav: Uav): Promise<import("mongoose").Document<unknown, {}, Uav> & Uav & {
         _id: import("mongoose").Types.ObjectId;
     }>;

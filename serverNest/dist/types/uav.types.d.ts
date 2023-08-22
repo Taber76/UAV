@@ -7,6 +7,7 @@ export interface UavJwt {
     jwt: string;
 }
 export interface LongCommand {
+    uavname: string;
     message: string;
     param1: number;
     param2: number;

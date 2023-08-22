@@ -4,16 +4,24 @@ export declare class UAV {
     private readonly url;
     private status;
     private position;
+    private battery;
     private speed;
     private waypoints;
     constructor(uavName: string, url: string);
     longCommand(data: LongCommand): Promise<any>;
     getStatusOnBoard(): Promise<void>;
+    getPositionOnBoard(): Promise<void>;
+    getMessage(message: any): Promise<any>;
     getStatus(): string;
     getPosition(): {
         lat: number;
         lon: number;
         alt: number;
+        relative_alt: number;
+        vx: number;
+        vy: number;
+        vz: number;
+        hdg: number;
     };
     getSpeed(): number;
     getWaypoints(): {
@@ -22,7 +30,7 @@ export declare class UAV {
         alt: number;
     }[];
     setStatus(status: string): void;
-    setPosition(lat: number, lon: number, alt: number): void;
+    setPosition(lat: number, lon: number, alt: number, relative_alt: number, vx: number, vy: number, vz: number, hdg: number): void;
     setSpeed(speed: number): void;
     addWaypoint(lat: number, lon: number, alt: number): void;
 }

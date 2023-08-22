@@ -20,9 +20,11 @@ class pixhawk(object):
                 if msg.get_type() == msgType:
                     msg = msg.to_dict()
                     json_msg = json.dumps(msg)
+
+                    json_obj = json.loads(json_msg)
                     # <---------------------
-                    print('---------------> ', json_msg)
-                    return ({'response': True, 'message': json_msg})
+                    print('---------------> ', json_obj)
+                    return ({'response': True, 'message': json_obj})
                 if time.time() - init_time >= maxTime:
                     return ({'response': False, 'message': 'Timeout'})
 

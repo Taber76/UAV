@@ -9,7 +9,7 @@ import {
   Ip
 } from '@nestjs/common';
 import { UavService } from './uav.service';
-import { UavConnection, UavData, UavJwt } from 'src/types/uav.types';
+import { LongCommand, UavConnection, UavData, UavJwt } from 'src/types/uav.types';
 import { GlobalService } from 'src/global/global.service';
 import { UAV } from './uav.model';
 
@@ -26,7 +26,7 @@ export class UavController {
   // FROM CLIENT TO UAV -------------------------------------------------------
   // Long command to UAV
   @Post('longcommand')
-  async longCommand(@Body() data: any): Promise<any> {
+  async longCommand(@Body() data: LongCommand): Promise<any> {
     try {
       const response = await this.uavInstances[data.uavname].longCommand(data);
       if (response.response === true) {
@@ -48,8 +48,42 @@ export class UavController {
   }
 
   @Get('status')
-  async getStatus(@Query() uavname: string): Promise<any> {
-    return this.uavInstances[uavname].getStatus();
+  async getStatus(@Query() data: any): Promise<any> {
+    try {
+      if (data.uavname in this.uavInstances) {
+        return this.uavInstances[data.uavname].getStatus();
+      } else {
+        throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('position')
+  async getPosition(@Query() data: any): Promise<any> {
+    try {
+      if (data.uavname in this.uavInstances) {
+        return this.uavInstances[data.uavname].getPosition();
+      } else {
+        throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('message')
+  async getMessage(@Query() data: any): Promise<any> {
+    try {
+      if (data.uavname in this.uavInstances) {
+        return this.uavInstances[data.uavname].getMessage(data.message);
+      } else {
+        throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   // FROM CLIENT TO THIS SERVER -------------------------------------------------
@@ -69,7 +103,6 @@ export class UavController {
   async list(): Promise<any> {
     return this.uavInstances;
   }
-
 
 
   @Get('clientconnect') // en que estaba pensando?
@@ -99,9 +132,9 @@ export class UavController {
         data.password,
       );
       if (response.response === true) {
-        const newUAVInsance = new UAV(data.uavname, data.url) //,data.jwt);
+        const newUAVInsance = new UAV(data.uavname, "http://192.168.1.14:8080")//ip) //,data.jwt);
         this.uavInstances[data.uavname] = newUAVInsance;
-        this.globalService.uavUrl = ip;
+        this.globalService.uavUrl = "http://192.168.1.14:8080" //ip;
         this.globalService.uavName = data.uavname;
         return { response: true };
       } else {

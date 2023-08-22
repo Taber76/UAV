@@ -7,7 +7,8 @@ class UAV {
         this.uavName = uavName;
         this.url = url;
         this.status = 'Disarmed';
-        this.position = { lat: 0, lon: 0, alt: 0 };
+        this.position = { lat: 0, lon: 0, alt: 0, relative_alt: 0, vx: 0, vy: 0, vz: 0, hdg: 0 };
+        this.battery = { battery_remaining: 0, voltage_battery: 0, current_battery: 0 };
         this.speed = 0;
         this.waypoints = [];
     }
@@ -25,13 +26,28 @@ class UAV {
     async getStatusOnBoard() {
         const response = await (0, node_fetch_1.default)(`${this.url}/pix?msg_type=SYS_STATUS&max_time=5`);
         const jsonresponse = await response.json();
+        const batteryKeys = ['battery_remaining', 'voltage_battery', 'current_battery'];
+        batteryKeys.forEach(key => this.battery[key] = jsonresponse.message[key]);
         return;
     }
+    async getPositionOnBoard() {
+        const response = await (0, node_fetch_1.default)(`${this.url}/pix?msg_type=GLOBAL_POSITION_INT&max_time=5`);
+        const jsonresponse = await response.json();
+        const positionKeys = ['lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'hdg'];
+        positionKeys.forEach(key => this.position[key] = jsonresponse.message[key]);
+        return;
+    }
+    async getMessage(message) {
+        const response = await (0, node_fetch_1.default)(`${this.url}/pix?msg_type=${message}&max_time=5`);
+        const jsonresponse = await response.json();
+        return jsonresponse;
+    }
     getStatus() {
+        this.getStatusOnBoard();
         return this.status;
     }
     getPosition() {
-        this.getStatusOnBoard();
+        this.getPositionOnBoard();
         return this.position;
     }
     getSpeed() {
@@ -43,9 +59,9 @@ class UAV {
     setStatus(status) {
         this.status = status;
     }
-    setPosition(lat, lon, alt) {
+    setPosition(lat, lon, alt, relative_alt, vx, vy, vz, hdg) {
         this.getStatusOnBoard();
-        this.position = { lat, lon, alt };
+        this.position = { lat, lon, alt, relative_alt, vx, vy, vz, hdg };
     }
     setSpeed(speed) {
         this.speed = speed;

@@ -4,7 +4,22 @@ import { LongCommand } from 'src/types/uav.types';
 
 export class UAV {
   private status: string = 'Disarmed';
-  private position: { lat: number, lon: number, alt: number } = { lat: 0, lon: 0, alt: 0 };
+  private position:
+    {
+      lat: number,
+      lon: number,
+      alt: number,
+      relative_alt: number,
+      vx: number,
+      vy: number,
+      vz: number,
+      hdg: number    // yaw angle (cabeceo)
+    } = { lat: 0, lon: 0, alt: 0, relative_alt: 0, vx: 0, vy: 0, vz: 0, hdg: 0 };
+  private battery: {
+    battery_remaining: number,
+    voltage_battery: number,
+    current_battery: number
+  } = { battery_remaining: 0, voltage_battery: 0, current_battery: 0 };
   private speed: number = 0;
   private waypoints: { lat: number, lon: number, alt: number }[] = [];
 
@@ -30,17 +45,34 @@ export class UAV {
   async getStatusOnBoard() {
     const response = await fetch(`${this.url}/pix?msg_type=SYS_STATUS&max_time=5`);
     const jsonresponse = await response.json();
-    // actualizar atributos de posición, velocidad, etc.
+    const batteryKeys = ['battery_remaining', 'voltage_battery', 'current_battery'];
+    batteryKeys.forEach(key => this.battery[key] = jsonresponse.message[key]);
     return;
   }
 
+  async getPositionOnBoard() {
+    const response = await fetch(`${this.url}/pix?msg_type=GLOBAL_POSITION_INT&max_time=5`);
+    const jsonresponse = await response.json();
+    const positionKeys = ['lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'hdg'];
+    positionKeys.forEach(key => this.position[key] = jsonresponse.message[key]);
+    return;
+  }
+
+  async getMessage(message) {
+    const response = await fetch(`${this.url}/pix?msg_type=${message}&max_time=5`);
+    const jsonresponse = await response.json();
+    return jsonresponse;
+  }
+
+  // PROPIEDADES -----------------------------------
 
   getStatus(): string {
+    this.getStatusOnBoard()
     return this.status;
   }
 
-  getPosition(): { lat: number, lon: number, alt: number } {
-    this.getStatusOnBoard()
+  getPosition(): { lat: number, lon: number, alt: number, relative_alt: number, vx: number, vy: number, vz: number, hdg: number } {
+    this.getPositionOnBoard()
     return this.position;
   }
 
@@ -56,9 +88,9 @@ export class UAV {
     this.status = status;
   }
 
-  setPosition(lat: number, lon: number, alt: number) {
+  setPosition(lat: number, lon: number, alt: number, relative_alt: number, vx: number, vy: number, vz: number, hdg: number) {
     this.getStatusOnBoard();
-    this.position = { lat, lon, alt };
+    this.position = { lat, lon, alt, relative_alt, vx, vy, vz, hdg };
   }
 
   setSpeed(speed: number) {

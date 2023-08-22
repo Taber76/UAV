@@ -42,8 +42,44 @@ let UavController = exports.UavController = class UavController {
             throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    async getStatus(uavname) {
-        return this.uavInstances[uavname].getStatus();
+    async getStatus(data) {
+        try {
+            if (data.uavname in this.uavInstances) {
+                return this.uavInstances[data.uavname].getStatus();
+            }
+            else {
+                throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (error) {
+            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async getPosition(data) {
+        try {
+            if (data.uavname in this.uavInstances) {
+                return this.uavInstances[data.uavname].getPosition();
+            }
+            else {
+                throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (error) {
+            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async getMessage(data) {
+        try {
+            if (data.uavname in this.uavInstances) {
+                return this.uavInstances[data.uavname].getMessage(data.message);
+            }
+            else {
+                throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (error) {
+            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     async register(data) {
         try {
@@ -76,9 +112,9 @@ let UavController = exports.UavController = class UavController {
         try {
             const response = await this.uavService.uavConection(data.uavname, data.password);
             if (response.response === true) {
-                const newUAVInsance = new uav_model_1.UAV(data.uavname, data.url);
+                const newUAVInsance = new uav_model_1.UAV(data.uavname, "http://192.168.1.14:8080");
                 this.uavInstances[data.uavname] = newUAVInsance;
-                this.globalService.uavUrl = ip;
+                this.globalService.uavUrl = "http://192.168.1.14:8080";
                 this.globalService.uavName = data.uavname;
                 return { response: true };
             }
@@ -111,9 +147,23 @@ __decorate([
     (0, common_1.Get)('status'),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UavController.prototype, "getStatus", null);
+__decorate([
+    (0, common_1.Get)('position'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UavController.prototype, "getPosition", null);
+__decorate([
+    (0, common_1.Get)('message'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UavController.prototype, "getMessage", null);
 __decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),

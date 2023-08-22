@@ -43,6 +43,7 @@ const LoginForm = () => {
     )
     if (response.status === 201) {
       //localStorage.setItem("jwtToken", response.data.token);
+      
       navigate('/main')
     } else {
       return swal('Error!', 'Usuario o contraseña incorrectos!', 'error')

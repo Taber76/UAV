@@ -12,7 +12,7 @@ export const getConnected = async (selectedUAV) => {
   }  
 
   export const getStatus = async (selectedUAV) => {
-    const response = await axios.get(`${apiUrl}/uav/status?name=${selectedUAV}`);
+    const response = await axios.get(`${apiUrl}/uav/status?uavname=${selectedUAV}`);
     if (response.status === 200) {
       return response
     }

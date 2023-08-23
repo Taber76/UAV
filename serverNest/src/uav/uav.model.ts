@@ -3,6 +3,7 @@ import { LongCommand } from 'src/types/uav.types';
 
 
 export class UAV {
+
   private status: string = 'Disarmed';
   private position:
     {
@@ -29,6 +30,9 @@ export class UAV {
     // private readonly jwt: string
   ) { }
 
+
+  // METODOS -------------------------------------------
+
   async longCommand(data: LongCommand) {
     const response = await fetch(`${this.url}/pix`, {
       method: 'POST',
@@ -43,29 +47,41 @@ export class UAV {
   }
 
   async getStatusOnBoard() {
-    const response = await fetch(`${this.url}/pix?msg_type=SYS_STATUS&max_time=5`);
-    const jsonresponse = await response.json();
-    const batteryKeys = ['battery_remaining', 'voltage_battery', 'current_battery'];
-    batteryKeys.forEach(key => this.battery[key] = jsonresponse.message[key]);
-    return;
+    try {
+      const response = await fetch(`${this.url}/pix?msg_type=SYS_STATUS&max_time=5`);
+      const jsonresponse = await response.json();
+      const batteryKeys = ['battery_remaining', 'voltage_battery', 'current_battery'];
+      batteryKeys.forEach(key => this.battery[key] = jsonresponse.message[key]);
+      return;
+    } catch (error) {
+      throw error
+    }
   }
 
   async getPositionOnBoard() {
-    const response = await fetch(`${this.url}/pix?msg_type=GLOBAL_POSITION_INT&max_time=5`);
-    const jsonresponse = await response.json();
-    const positionKeys = ['lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'hdg'];
-    positionKeys.forEach(key => this.position[key] = jsonresponse.message[key]);
-    return;
+    try {
+      const response = await fetch(`${this.url}/pix?msg_type=GLOBAL_POSITION_INT&max_time=5`);
+      const jsonresponse = await response.json();
+      const positionKeys = ['lat', 'lon', 'alt', 'relative_alt', 'vx', 'vy', 'vz', 'hdg'];
+      positionKeys.forEach(key => this.position[key] = jsonresponse.message[key]);
+      return;
+    } catch (error) {
+      throw error
+    }
   }
 
   async getMessage(message) {
-    const response = await fetch(`${this.url}/pix?msg_type=${message}&max_time=5`);
-    const jsonresponse = await response.json();
-    return jsonresponse;
+    try {
+      const response = await fetch(`${this.url}/pix?msg_type=${message}&max_time=5`);
+      const jsonresponse = await response.json();
+      return jsonresponse;
+    } catch (error) {
+      throw error
+    }
   }
 
   // PROPIEDADES -----------------------------------
-
+  // GET -------------------------------------------
   getStatus(): string {
     this.getStatusOnBoard()
     return this.status;
@@ -84,6 +100,8 @@ export class UAV {
     return this.waypoints;
   }
 
+
+  // SET -----------------------------------
   setStatus(status: string) {
     this.status = status;
   }

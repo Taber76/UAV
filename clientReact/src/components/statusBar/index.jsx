@@ -6,67 +6,57 @@ import DropdownButton from "../dropdownButton";
 import StatusDisplay from "../statusDisplay";
 import './styles.css';
 
-import { select, connecting, connected, disconnect } from "../../store/uavSlice";
-import { getConnected, getStatus } from "../../services/uavService";
+import { connected, disconnect } from "../../store/uavSlice";
+import { getStatus } from "../../services/uavService";
 const apiUrl = import.meta.env.VITE_API_URL
 
 const StatusBar = () => {
   const [signal, setSignal] = useState('disabled');
-  const [options, setOptions] = useState({});
+  const [uavList, setUavList] = useState({});
 
   const dispatch = useDispatch();
+  const uavConnected = useSelector((state) => state.uav.connected);
   const selectedUAV = useSelector((state) => state.uav.uavname);
-  const connectedUAV = useSelector((state) => state.uav.connected);
   const status = useSelector((state) => state.uav.status);
 
-  const handleSelect = async (optionLabel) => { // cuando seleciono una opcion
-    dispatch(select(optionLabel));
-
-    if (optionLabel === 'Unselected') {
+  // Selecciono UAV
+  const handleSelect = async (selected) => {
+    if (selected === 'Unselected') {
       dispatch(disconnect());
       setSignal('disabled');
     } else {
-
-      await getConnected(options[optionLabel]);
-      console.log(options[optionLabel]);
-
-      /*
-      if (response.result) {
-        dispatch(connected());
-        setSignal('caution');
-      } else {
-        dispatch(connecting())
-        setSignal('caution');
-      }
-      */
+      dispatch(connected(uavList[selected]));
+      setSignal('enabled');
     }
   }
- 
-  useEffect(() => {
+
+  // Obtengo lista de UAVs conectados al servidor
+  useEffect(() => { 
     async function fetchUavList() {
       const response = await axios.get(`${apiUrl}/uav/list`)
       if (response.status === 200) {
         response.data.Unselected = {}
-        setOptions(response.data)
+        setUavList(response.data)
       }
       return 
-          }
+    }
     fetchUavList()
   }, [])
 
+  // Obtengo estado de UAV cada 2000ms
   useEffect(() => {
     async function fetchUavStatus() {
-      if (connectedUAV) {
+      if (uavConnected) {
         const response = await getStatus(selectedUAV);
-        console.log(response);
         return response;
-      }
+      }   
+      return
     }
     const interval = setInterval(fetchUavStatus, 2000) 
       return () => {
       clearInterval(interval)
     }
-  }, [connectedUAV, selectedUAV]);
+  }, [uavConnected]);
   
 
   return (
@@ -74,7 +64,7 @@ const StatusBar = () => {
       <div></div>
       <div></div>
       <div>
-        <DropdownButton buttonText={selectedUAV} options={Object.keys(options).map(key => ({ label: key }))} onSelect={handleSelect} />
+        <DropdownButton buttonText={selectedUAV} options={Object.keys(uavList).map(key => ({ label: key }))} onSelect={handleSelect} />
         <StatusDisplay text={status} status={signal} />
       </div>
     </div>

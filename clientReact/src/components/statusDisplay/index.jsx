@@ -3,7 +3,6 @@ import React from 'react';
 const StatusDisplay = ({ text, status }) => {
   let backgroundColor, textColor;
 
-  // Establece los colores de fondo y texto en función del estado
   switch (status) {
     case 'disabled':
       backgroundColor = 'gray';
@@ -17,7 +16,7 @@ const StatusDisplay = ({ text, status }) => {
       backgroundColor = 'red';
       textColor = 'white';
       break;
-    case 'good':
+    case 'enabled':
       backgroundColor = 'green';
       textColor = 'white';
       break;

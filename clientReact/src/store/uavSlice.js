@@ -3,11 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const uavSlice = createSlice({
   name: 'uav',
   initialState: { 
-    uavname: 'No selected',
+    uavname: 'Unselected',
     connected: false,
     status: 'Offline',
     url: null,
-    location: null,
+    position: { lat: -32.7983559, lon: -55.9612037 },
     speed: null,
     battery: null,
     waypoints: [],
@@ -19,15 +19,21 @@ const uavSlice = createSlice({
     connecting: (state) => {
       state.status = 'Connecting...';
     },
-    connected: (state) => {
-      state.status = 'Disarmed';
+    connected: (state, action) => {
+      state.uavname = action.payload.uavName;
       state.connected = true;
-    },
+      state.status = action.payload.status;
+      state.url = action.payload.url;
+      state.position = action.payload.position;
+      state.speed = action.payload.speed;
+      state.battery = action.payload.battery;
+      state.waypoints = action.payload.waypoints;
+     },
     arm: (state) => {
       state.status = 'Armed';
     },
     disconnect: (state) => {
-      state.name = 'No selected';
+      state.uavname = 'Unselected';
       state.status = 'Offline';
       state.connected = false;
     },
@@ -35,7 +41,7 @@ const uavSlice = createSlice({
       state.url = action.payload;
     },
     setLocation: (state, action) => {
-      state.location = action.payload;
+      state.position = action.payload;
     },
     setSpeed: (state, action) => {
       state.speed = action.payload;

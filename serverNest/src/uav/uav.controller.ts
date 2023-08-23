@@ -13,7 +13,6 @@ import { LongCommand, UavConnection, UavData, UavJwt } from 'src/types/uav.types
 import { GlobalService } from 'src/global/global.service';
 import { UAV } from './uav.model';
 
-
 @Controller('api/uav')
 export class UavController {
   private uavInstances: { [key: string]: UAV } = {}
@@ -49,27 +48,21 @@ export class UavController {
 
   @Get('status')
   async getStatus(@Query() data: any): Promise<any> {
-    try {
-      if (data.uavname in this.uavInstances) {
-        return this.uavInstances[data.uavname].getStatus();
-      } else {
-        throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
-      }
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    const uavInstance = this.uavInstances[data.uavname];
+    if (uavInstance) {
+      return uavInstance.getStatus();
+    } else {
+      throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
     }
   }
 
   @Get('position')
   async getPosition(@Query() data: any): Promise<any> {
-    try {
-      if (data.uavname in this.uavInstances) {
-        return this.uavInstances[data.uavname].getPosition();
-      } else {
-        throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
-      }
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    const uavInstance = this.uavInstances[data.uavname];
+    if (uavInstance) {
+      return uavInstance.getPosition();
+    } else {
+      throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
     }
   }
 

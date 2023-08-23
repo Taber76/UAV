@@ -43,29 +43,21 @@ let UavController = exports.UavController = class UavController {
         }
     }
     async getStatus(data) {
-        try {
-            if (data.uavname in this.uavInstances) {
-                return this.uavInstances[data.uavname].getStatus();
-            }
-            else {
-                throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
-            }
+        const uavInstance = this.uavInstances[data.uavname];
+        if (uavInstance) {
+            return uavInstance.getStatus();
         }
-        catch (error) {
-            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        else {
+            throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
         }
     }
     async getPosition(data) {
-        try {
-            if (data.uavname in this.uavInstances) {
-                return this.uavInstances[data.uavname].getPosition();
-            }
-            else {
-                throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
-            }
+        const uavInstance = this.uavInstances[data.uavname];
+        if (uavInstance) {
+            return uavInstance.getPosition();
         }
-        catch (error) {
-            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        else {
+            throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
         }
     }
     async getMessage(data) {

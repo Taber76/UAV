@@ -6,8 +6,8 @@ import DropdownButton from "../dropdownButton";
 import StatusDisplay from "../statusDisplay";
 import './styles.css';
 
-import { connected, disconnect } from "../../store/uavSlice";
-import { getStatus } from "../../services/uavService";
+import { connected, disconnect, setPosition } from "../../store/uavSlice";
+import { getStatus, getPosition } from "../../services/uavService";
 const apiUrl = import.meta.env.VITE_API_URL
 
 const StatusBar = () => {
@@ -15,9 +15,7 @@ const StatusBar = () => {
   const [uavList, setUavList] = useState({});
 
   const dispatch = useDispatch();
-  const uavConnected = useSelector((state) => state.uav.connected);
-  const selectedUAV = useSelector((state) => state.uav.uavname);
-  const status = useSelector((state) => state.uav.status);
+  const uav = useSelector((state) => state.uav);
 
   // Selecciono UAV
   const handleSelect = async (selected) => {
@@ -46,9 +44,19 @@ const StatusBar = () => {
   // Obtengo estado de UAV cada 2000ms
   useEffect(() => {
     async function fetchUavStatus() {
-      if (uavConnected) {
-        const response = await getStatus(selectedUAV);
-        return response;
+      if (uav.connected) {
+        /*
+        const uavStatus = await getStatus(uav.uavname);
+        if (uavStatus.valid) {
+          
+        }
+        */
+        const uavPostion = await getPosition(uav.uavname);
+        if (uavPostion.valid) {
+          dispatch(setPosition(uavPostion.data));
+          console.log(uav.position)
+        }
+        return;
       }   
       return
     }
@@ -56,7 +64,7 @@ const StatusBar = () => {
       return () => {
       clearInterval(interval)
     }
-  }, [uavConnected]);
+  }, [uav.connected]);
   
 
   return (
@@ -64,8 +72,8 @@ const StatusBar = () => {
       <div></div>
       <div></div>
       <div>
-        <DropdownButton buttonText={selectedUAV} options={Object.keys(uavList).map(key => ({ label: key }))} onSelect={handleSelect} />
-        <StatusDisplay text={status} status={signal} />
+        <DropdownButton buttonText={uav.uavname} options={Object.keys(uavList).map(key => ({ label: key }))} onSelect={handleSelect} />
+        <StatusDisplay text={uav.status} status={signal} />
       </div>
     </div>
   )

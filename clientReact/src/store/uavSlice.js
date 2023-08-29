@@ -7,7 +7,7 @@ const uavSlice = createSlice({
     connected: false,
     status: 'Offline',
     url: null,
-    position: { lat: -32.7983559, lon: -55.9612037 },
+    position: { lat: -32.7983559, lon: -55.9612037, alt: 0, relative_alt: 0 },
     speed: null,
     battery: null,
     waypoints: [],
@@ -40,7 +40,7 @@ const uavSlice = createSlice({
     setUrl: (state, action) => {
       state.url = action.payload;
     },
-    setLocation: (state, action) => {
+    setPosition: (state, action) => {
       state.position = action.payload;
     },
     setSpeed: (state, action) => {
@@ -58,5 +58,5 @@ const uavSlice = createSlice({
   },
 });
 
-export const { select, connecting, connected, arm, disconnect, setUrl, setLocation, setSpeed, setBattery, addWaypoint, removeWaypoint } = uavSlice.actions;
+export const { select, connecting, connected, arm, disconnect, setUrl, setPosition, setSpeed, setBattery, addWaypoint, removeWaypoint } = uavSlice.actions;
 export default uavSlice.reducer;

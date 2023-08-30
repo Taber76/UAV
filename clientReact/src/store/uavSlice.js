@@ -7,7 +7,7 @@ const uavSlice = createSlice({
     connected: false,
     status: 'Offline',
     url: null,
-    position: { lat: -32.7983559, lon: -55.9612037, alt: 0, relative_alt: 0 },
+    position: { lat: -32.7983559, lon: -55.9612037, alt: 0, relative_alt: 0, hdg: 0 },
     speed: null,
     battery: null,
     waypoints: [],
@@ -24,7 +24,13 @@ const uavSlice = createSlice({
       state.connected = true;
       state.status = action.payload.status;
       state.url = action.payload.url;
-      state.position = action.payload.position;
+      state.position = {
+         lat: action.payload.position.lat / 10000000,
+         lon: action.payload.position.lon / 10000000,
+         alt: action.payload.position.alt,
+         relative_alt: action.payload.position.relative_alt,
+         hdg: action.payload.position.hdg / 100
+        };
       state.speed = action.payload.speed;
       state.battery = action.payload.battery;
       state.waypoints = action.payload.waypoints;
@@ -41,7 +47,13 @@ const uavSlice = createSlice({
       state.url = action.payload;
     },
     setPosition: (state, action) => {
-      state.position = action.payload;
+      state.position = {
+        lat: action.payload.lat / 10000000,
+        lon: action.payload.lon / 10000000,
+        alt: action.payload.alt,
+        relative_alt: action.payload.relative_alt,
+        hdg: action.payload.hdg / 100
+       };
     },
     setSpeed: (state, action) => {
       state.speed = action.payload;

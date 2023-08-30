@@ -104,9 +104,9 @@ let UavController = exports.UavController = class UavController {
         try {
             const response = await this.uavService.uavConection(data.uavname, data.password);
             if (response.response === true) {
-                const newUAVInsance = new uav_model_1.UAV(data.uavname, "http://192.168.1.14:8080");
+                const newUAVInsance = new uav_model_1.UAV(data.uavname, "http://192.168.1.17:8080");
                 this.uavInstances[data.uavname] = newUAVInsance;
-                this.globalService.uavUrl = "http://192.168.1.14:8080";
+                this.globalService.uavUrl = "http://192.168.1.17:8080";
                 this.globalService.uavName = data.uavname;
                 return { response: true };
             }

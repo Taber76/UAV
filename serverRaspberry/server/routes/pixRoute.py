@@ -97,4 +97,12 @@ mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0,
 220	MAV_MODE_AUTO_ARMED	System is allowed to be active, under autonomous control and navigation (the trajectory is decided onboard and not pre-programmed by waypoints)
 
 
+GET MESSAGE
+
+- SYS_STATUS
+- HEARTBEAT
+- GLOBAL_POSITION_INT
+- BATTERY_STATUS
+
+
 '''

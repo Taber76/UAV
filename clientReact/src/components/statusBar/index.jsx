@@ -54,7 +54,6 @@ const StatusBar = () => {
         const uavPostion = await getPosition(uav.uavname);
         if (uavPostion.valid) {
           dispatch(setPosition(uavPostion.data));
-          console.log(uav.position)
         }
         return;
       }   

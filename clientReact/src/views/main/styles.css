@@ -1,5 +1,12 @@
 .mainContainer {
   background-color: rgba(31, 27, 27, 0.267);
+  position: relative;
+}
+
+.statusBarContainer {
+  width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .mapContainer {
@@ -7,8 +14,9 @@
   z-index: 0;
 }
 
-.statusBarContainer {
-  width: 100%;
-  position: relative;
+.videoContainer {
+  position: absolute;
   z-index: 1;
+  left: 0;
+  bottom: 0;
 }

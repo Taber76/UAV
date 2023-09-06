@@ -4,10 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Uav } from './uav.schema';
 import { GlobalService } from 'src/global/global.service';
 
-import fetch from 'node-fetch';
 import * as bcrypt from 'bcrypt';
-
-import { LongCommand } from 'src/types/uav.types';
 
 @Injectable()
 export class UavService {
@@ -37,7 +34,5 @@ export class UavService {
       return { response: true };
     }
   }
-
-
 
 }

@@ -2,27 +2,16 @@ import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL
 
-export const getConnected = async (selectedUAV) => {
-    //const response = await axios.get(`${apiUrl}/uav/clientconnect?name=${selectedUAV}`);
-    //if (response.status === 200) {
-    //  return response.data
-    //}
-    const response = await axios.get(`${apiUrl}/uav/position?uavname=${selectedUAV.uavName}`)
-    return response
-  }  
+export const getUavList = async () => {
+  const response = await axios.get(`${apiUrl}/uav/list`);
+  return response
+}
 
-  export const getStatus = async (selectedUAV) => {
-    const response = await axios.get(`${apiUrl}/uav/status?uavname=${selectedUAV}`);
-    if (response.status === 200) {
-      return { ...response, valid: true }
-    }
-    return { valid: false }
+export const getUavInfo = async (selectedUAV, info) => {
+  const response = await axios.get(`${apiUrl}/uav/info?uavname=${selectedUAV}&info=${info}`);
+  if (response.status === 200) {
+    return { ...response, valid: true }
   }
+  return { valid: false }
+}
 
-  export const getPosition = async (selectedUAV) => {
-    const response = await axios.get(`${apiUrl}/uav/position?uavname=${selectedUAV}`);
-    if (response.status === 200) {
-      return { ...response, valid: true }
-    }
-    return { valid: false }
-  }

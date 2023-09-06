@@ -11,7 +11,8 @@ export declare class UAV {
     longCommand(data: LongCommand): Promise<any>;
     getStatusOnBoard(): Promise<void>;
     getPositionOnBoard(): Promise<void>;
-    getMessage(message: any): Promise<any>;
+    getMessage(message: string): Promise<any>;
+    getInfo(info: string): any;
     getStatus(): string;
     getPosition(): {
         lat: number;

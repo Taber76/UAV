@@ -57,6 +57,17 @@ class UAV {
             throw error;
         }
     }
+    getInfo(info) {
+        if (info === 'status') {
+            return this.getStatus();
+        }
+        else if (info === 'position') {
+            return this.getPosition();
+        }
+        else {
+            return this.getMessage(info);
+        }
+    }
     getStatus() {
         this.getStatusOnBoard();
         return this.status;

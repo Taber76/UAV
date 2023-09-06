@@ -1,0 +1,17 @@
+.videoBorder {
+  width: 320px;
+  height: 240px;
+  border-radius: 10px;
+  border: 3px solid #021b17;
+  overflow: hidden;
+  margin: 5px;
+}
+
+.uavVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: saturate(100%) hue-rotate(-40deg);
+  filter: brightness(110%) contrast(90%);
+  background: -webkit-linear-gradient(135deg, #4AFFE1, #02A186, #4AFFE1, #02A186);
+}

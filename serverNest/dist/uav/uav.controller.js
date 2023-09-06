@@ -42,6 +42,21 @@ let UavController = exports.UavController = class UavController {
             throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    async getInfo(data) {
+        try {
+            const info = data.info;
+            const uavInstance = this.uavInstances[data.uavname];
+            if (uavInstance) {
+                return uavInstance.getInfo(info);
+            }
+            else {
+                throw new common_1.HttpException('UAV not found', common_1.HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (error) {
+            throw new common_1.HttpException(error, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     async getStatus(data) {
         const uavInstance = this.uavInstances[data.uavname];
         if (uavInstance) {
@@ -104,9 +119,9 @@ let UavController = exports.UavController = class UavController {
         try {
             const response = await this.uavService.uavConection(data.uavname, data.password);
             if (response.response === true) {
-                const newUAVInsance = new uav_model_1.UAV(data.uavname, "http://192.168.1.17:8080");
+                const newUAVInsance = new uav_model_1.UAV(data.uavname, "http://192.168.1.16:8000");
                 this.uavInstances[data.uavname] = newUAVInsance;
-                this.globalService.uavUrl = "http://192.168.1.17:8080";
+                this.globalService.uavUrl = "http://192.168.1.16:8000";
                 this.globalService.uavName = data.uavname;
                 return { response: true };
             }
@@ -135,6 +150,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UavController.prototype, "longCommand", null);
+__decorate([
+    (0, common_1.Get)('info'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UavController.prototype, "getInfo", null);
 __decorate([
     (0, common_1.Get)('status'),
     __param(0, (0, common_1.Query)()),

@@ -70,7 +70,7 @@ export class UAV {
     }
   }
 
-  async getMessage(message) {
+  async getMessage(message: string) {
     try {
       const response = await fetch(`${this.url}/pix?msg_type=${message}&max_time=5`);
       const jsonresponse = await response.json();
@@ -82,6 +82,16 @@ export class UAV {
 
   // PROPIEDADES -----------------------------------
   // GET -------------------------------------------
+  getInfo(info: string): any {
+    if (info === 'status') {
+      return this.getStatus();
+    } else if (info === 'position') {
+      return this.getPosition();
+    } else {
+      return this.getMessage(info);
+    }
+  }
+
   getStatus(): string {
     this.getStatusOnBoard()
     return this.status;

@@ -4,6 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GlobalService } from './global/global.service';
 import { UavModule } from './uav/uav.module';
 import { UserModule } from './user/user.module';
+//import { RtspModule } from './rtsp.deprecated/rtsp.module';
+//import { FfmpegModule } from './ffmpeg/ffmpeg.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { UserModule } from './user/user.module';
     }),
     UavModule,
     UserModule,
+    //RtspModule,
+    //FfmpegModule,
   ],
   providers: [GlobalService],
 })

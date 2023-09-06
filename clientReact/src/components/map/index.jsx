@@ -23,14 +23,20 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (mapRef.current && uavData.connected) {
-      console.log(uavData.position.hdg);
       const map = mapRef.current;
-      const uav = uavRef.current;
       const newPosition = L.latLng(uavData.position.lat, uavData.position.lon);
       map.setView(newPosition, map.getZoom(), { animate: true });
-      uav.rotationAngle = uavData.position.hdg;
     }
-  }, [uavData.connected, uavData.position]);
+  }, [uavData.connected]);
+
+  useEffect(() => {
+    if (uavRef.current && uavData.connected) {
+      const uav = uavRef.current;
+      const newPosition = L.latLng(uavData.position.lat, uavData.position.lon);
+      uav.setLatLng(newPosition);
+      uav.setRotationAngle(uavData.position.hdg);
+    }
+  }, [uavData.position]);
   
   return (
     <MapContainer

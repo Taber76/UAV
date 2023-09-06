@@ -7,6 +7,7 @@ export declare class UavController {
     private uavInstances;
     constructor(uavService: UavService, globalService: GlobalService);
     longCommand(data: LongCommand): Promise<any>;
+    getInfo(data: any): Promise<any>;
     getStatus(data: any): Promise<any>;
     getPosition(data: any): Promise<any>;
     getMessage(data: any): Promise<any>;

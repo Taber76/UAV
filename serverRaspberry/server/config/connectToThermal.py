@@ -1,7 +1,6 @@
 import board
 import busio
 import adafruit_mlx90640
-import matplotlib.pyplot as plt
 import numpy as np
 
 thermal_connected = False

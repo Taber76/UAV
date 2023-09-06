@@ -46,6 +46,21 @@ export class UavController {
     }
   }
 
+  @Get('info')
+  async getInfo(@Query() data: any): Promise<any> {
+    try {
+      const info = data.info;
+      const uavInstance = this.uavInstances[data.uavname];
+      if (uavInstance) {
+        return uavInstance.getInfo(info);
+      } else {
+        throw new HttpException('UAV not found', HttpStatus.BAD_REQUEST);
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Get('status')
   async getStatus(@Query() data: any): Promise<any> {
     const uavInstance = this.uavInstances[data.uavname];
@@ -125,9 +140,9 @@ export class UavController {
         data.password,
       );
       if (response.response === true) {
-        const newUAVInsance = new UAV(data.uavname, "http://192.168.1.17:8080")//ip) //,data.jwt);
+        const newUAVInsance = new UAV(data.uavname, "http://192.168.1.16:8000")//ip) //,data.jwt);
         this.uavInstances[data.uavname] = newUAVInsance;
-        this.globalService.uavUrl = "http://192.168.1.17:8080" //ip;
+        this.globalService.uavUrl = "http://192.168.1.16:8000" //ip;
         this.globalService.uavName = data.uavname;
         return { response: true };
       } else {

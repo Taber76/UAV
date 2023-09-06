@@ -6,3 +6,4 @@ export { default as MapComponent } from "./map";
 export { default as StatusBar } from "./statusBar";
 export { default as DropdownButton } from "./dropdownButton";
 export { default as StatusDisplay } from "./statusDisplay";
+export { default as UavVideo } from "./uavVideo";

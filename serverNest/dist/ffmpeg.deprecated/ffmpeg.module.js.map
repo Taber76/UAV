@@ -1,1 +1,0 @@
-{"version":3,"file":"ffmpeg.module.js","sourceRoot":"","sources":["../../src/ffmpeg.deprecated/ffmpeg.module.ts"],"names":[],"mappings":";;;;;;;;;AAAA,2CAAwC;AAGxC,2DAA6D;AAC7D,qDAAuD;AAMhD,IAAM,YAAY,0BAAlB,MAAM,YAAY;CAAI,CAAA;uBAAhB,YAAY;IAJxB,IAAA,eAAM,EAAC;QACN,WAAW,EAAE,CAAC,0CAAsB,CAAC;QACrC,SAAS,EAAE,CAAC,oCAAmB,CAAC;KACjC,CAAC;GACW,YAAY,CAAI"}

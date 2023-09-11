@@ -8,6 +8,8 @@ const uavSlice = createSlice({
     status: 'Offline',
     url: null,
     position: { lat: -32.7983559, lon: -55.9612037, alt: 0, relative_alt: 0, hdg: 0 },
+    roll: 0, // balanceo
+    pitch: 0, // cabeceo
     speed: null,
     battery: null,
     waypoints: [],

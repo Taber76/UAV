@@ -1,4 +1,4 @@
-import { MapComponent, StatusBar, UavVideo } from "../../components"
+import { MapComponent, StatusBar, UavVideo, HorizonInst } from "../../components"
 import './styles.css'
 
 const Main = () => {
@@ -8,6 +8,9 @@ const Main = () => {
     <div className="mainContainer">
       <div className="statusBarContainer">
         <StatusBar />
+      </div>
+      <div className="horizonContainer">
+        <HorizonInst />
       </div>
       <div className="videoContainer">
         <UavVideo videoUrl={videoUrl} />

@@ -20,3 +20,10 @@
   left: 0;
   bottom: 0;
 }
+
+.horizonContainer {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 245px;
+}

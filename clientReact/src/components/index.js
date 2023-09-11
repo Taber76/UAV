@@ -7,3 +7,4 @@ export { default as StatusBar } from "./statusBar";
 export { default as DropdownButton } from "./dropdownButton";
 export { default as StatusDisplay } from "./statusDisplay";
 export { default as UavVideo } from "./uavVideo";
+export { default as HorizonInst } from "./horizonInst";

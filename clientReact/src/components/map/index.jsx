@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TileLayer, MapContainer, Marker, Popup, useMapEvents, Polyline } from "react-leaflet";
 import Uavicon from '../../assets/uavmark.png';
+
+import { addWaypoint } from "../../store/uavSlice";
 
 import 'leaflet/dist/Leaflet.css';
 //import 'leaflet-bing-layer'
@@ -17,9 +19,9 @@ const IconLocation = L.icon({
 const MapComponent = () => {
   //const bingMapsKey = 'AjfnsByYOk_tdufEWpdpE9PLJ_Wlz0vTia_5FZzhKstX5sWKMXEc4wPgGUQsSQvx'
   
-  const [markers, setMarkers] = useState([]);
   const mapRef = useRef(null);
   const uavRef = useRef(null);
+  const dispatch = useDispatch();
   const uavData = useSelector((state) => state.uav);
 
   useEffect(() => {
@@ -51,6 +53,7 @@ const MapComponent = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+      
       {uavData.connected && (
         <Marker
           key={uavData.position.hdg}
@@ -64,25 +67,37 @@ const MapComponent = () => {
 
       <Polyline pathOptions={{ color: 'red' }} positions={[[-32.7983559, -55.9612037], [-32.7883559, -55.9712037]]} />
       
-      {markers.map((position, idx) => (
-        <Marker key={`marker-${idx}`} position={position}>
-          <Popup>
-            <span>Un marcador.</span>
-          </Popup>
-        </Marker>
-      ))}
+      {uavData.waypoints.map((position, idx) => (
+  <div key={`marker-${idx}`}>
+    <Marker position={[position.lat, position.lon]}>
+      <Popup>
+        <span>WP {idx + 1}</span>
+      </Popup>
+    </Marker>
+    {idx > 0 && uavData.waypoints[idx - 1] && (
+      <Polyline
+        pathOptions={{ color: 'red' }}
+        positions={[
+          [uavData.waypoints[idx - 1].lat, uavData.waypoints[idx - 1].lon],
+          [position.lat, position.lon]
+        ]}
+      />
+    )}
+  </div>
+))}
+
       
-      <LocationMarker markers={markers} setMarkers={setMarkers} />
+      <LocationMarker  uavData={uavData} dispatch={dispatch}/>
     </MapContainer>
   );
 };
 
-function LocationMarker({ markers, setMarkers }) {
+function LocationMarker({ uavData, dispatch }) {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
       const newMarker = [lat, lng];
-      setMarkers([...markers, newMarker]); 
+      dispatch(addWaypoint(newMarker));
     }
   });
   return null;

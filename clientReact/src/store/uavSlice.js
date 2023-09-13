@@ -64,7 +64,10 @@ const uavSlice = createSlice({
       state.battery = action.payload;
     },
     addWaypoint: (state, action) => {
-      state.waypoints.push(action.payload);
+      state.waypoints.push({ 
+        lat: action.payload[0],
+        lon: action.payload[1]
+      });
     },
     removeWaypoint: (state, action) => {
       state.waypoints.splice(action.payload, 1);

@@ -1,6 +1,5 @@
-![Badge en Desarollo](https://img.shields.io/badge/STATUS-DEVELOPING-yellow)
+![Badge en Desarollo](https://img.shields.io/badge/STATUS-DEVELOPING-yellow)![Badge en Desarollo](https://img.shields.io/badge/PIXHAWK-grey)
 
-![Badge en Desarollo](https://img.shields.io/badge/PIXHAWK-grey)
 [![My Skills](https://skillicons.dev/icons?i=nodejs,ts,nestjs,express,mongodb,py,flask,raspberrypi,vercel,html,css,bootstrap,react,redux,vite,git,github,postman,vscode&perline=6)](https://skillicons.dev)
 # UAV
 UAV for fire fighting

@@ -17,7 +17,7 @@ function HorizonInst() {
   }, [uavData.pitch, uavData.roll]);
 
   const horizonStyle = {
-    transform: `translateX(-25%) translateY(${pitch-200}px) rotate(${roll}deg)`,
+    transform: `translateX(-25%) translateY(${pitch*3.7-200}px) rotate(${roll}deg)`,
   };
 
   return (
@@ -28,24 +28,24 @@ function HorizonInst() {
         <div className='horizonHalf horizonHalfGreen'></div>
       </div>
       <HorizonInfo
-        width='25%'
+        width='30%'
         text='ROLL'
         value={roll}
         unit='deg'
         vPos='0%'
         hPos='0%'
-        color='red'
+        color='green'
         fontSize='12px'
         backgroundColor='rgba(255, 255, 255, 0.2)'
       />
       <HorizonInfo
-        width='25%'
+        width='30%'
         text='PITCH'
         value={pitch}
         unit='deg'
         vPos='10%'
         hPos='0%'
-        color='red'
+        color='green'
         fontSize='12px'
         backgroundColor='rgba(255, 255, 255, 0.2)'
       />

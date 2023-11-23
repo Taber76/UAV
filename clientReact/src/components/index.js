@@ -8,3 +8,4 @@ export { default as DropdownButton } from "./dropdownButton";
 export { default as StatusDisplay } from "./statusDisplay";
 export { default as UavVideo } from "./uavVideo";
 export { default as HorizonInst } from "./horizonInst";
+export { default as WaypointList } from "./waypointsList";

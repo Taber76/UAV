@@ -1,10 +1,10 @@
-import { MapComponent, StatusBar, UavVideo, HorizonInst } from "../../components"
+import { MapComponent, StatusBar, UavVideo, HorizonInst, WaypointList } from "../../components"
 import './styles.css'
 
 const Main = () => {
-  const videoUrl = "http://192.168.1.16:8082"
+  const videoUrl = "http://192.168.1.11:8082"
 
-  return(
+  return (
     <div className="mainContainer">
       <div className="statusBarContainer">
         <StatusBar />
@@ -14,6 +14,9 @@ const Main = () => {
       </div>
       <div className="videoContainer">
         <UavVideo videoUrl={videoUrl} />
+      </div>
+      <div className="waypointsContainer">
+        <WaypointList />
       </div>
       <div className="mapContainer">
         <MapComponent />

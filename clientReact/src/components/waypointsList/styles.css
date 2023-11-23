@@ -1,0 +1,6 @@
+.waypointsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin-right: 5px;
+}

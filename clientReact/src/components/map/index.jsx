@@ -11,14 +11,14 @@ import L from 'leaflet';
 import 'leaflet-rotatedmarker'
 
 const IconLocation = L.icon({
-    iconUrl: Uavicon,
-    iconSize: [40, 40],
-    iconAnchor: [20, 20],
-  })
+  iconUrl: Uavicon,
+  iconSize: [40, 40],
+  iconAnchor: [20, 20],
+})
 
 const MapComponent = () => {
   //const bingMapsKey = 'AjfnsByYOk_tdufEWpdpE9PLJ_Wlz0vTia_5FZzhKstX5sWKMXEc4wPgGUQsSQvx'
-  
+
   const mapRef = useRef(null);
   const uavRef = useRef(null);
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const MapComponent = () => {
       uav.setRotationAngle(uavData.position.hdg);
     }
   }, [uavData.position]);
-  
+
   return (
     <MapContainer
       ref={mapRef}
@@ -53,7 +53,7 @@ const MapComponent = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      
+
       {uavData.connected && (
         <Marker
           key={uavData.position.hdg}
@@ -65,29 +65,30 @@ const MapComponent = () => {
         />
       )}
 
-      <Polyline pathOptions={{ color: 'red' }} positions={[[-32.7983559, -55.9612037], [-32.7883559, -55.9712037]]} />
-      
       {uavData.waypoints.map((position, idx) => (
-  <div key={`marker-${idx}`}>
-    <Marker position={[position.lat, position.lon]}>
-      <Popup>
-        <span>WP {idx + 1}</span>
-      </Popup>
-    </Marker>
-    {idx > 0 && uavData.waypoints[idx - 1] && (
-      <Polyline
-        pathOptions={{ color: 'red' }}
-        positions={[
-          [uavData.waypoints[idx - 1].lat, uavData.waypoints[idx - 1].lon],
-          [position.lat, position.lon]
-        ]}
-      />
-    )}
-  </div>
-))}
+        <div key={`marker-${idx}`}>
+          <Marker position={[position.lat, position.lon]}>
+            <Popup>
+              <span>WP {idx}</span>
+            </Popup>
+          </Marker>
+          {idx > 0 && uavData.waypoints[idx - 1] && (
+            <Polyline
+              pathOptions={{ color: 'red' }}
+              positions={[
+                [uavData.waypoints[idx - 1].lat, uavData.waypoints[idx - 1].lon],
+                [position.lat, position.lon]
+              ]}
+            >
+              <Popup>
+                <span>Tramo {idx}, distancia {position.dist.toFixed(2)}Km</span>
+              </Popup>
+            </Polyline>
+          )}
+        </div>
+      ))}
 
-      
-      <LocationMarker  uavData={uavData} dispatch={dispatch}/>
+      <LocationMarker uavData={uavData} dispatch={dispatch} />
     </MapContainer>
   );
 };
@@ -106,5 +107,5 @@ function LocationMarker({ uavData, dispatch }) {
 
 export default MapComponent;
 
-     // <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'  /> 
-     //<TileLayer.Bing key={bingMapsKey}/>
+// <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'  />
+//<TileLayer.Bing key={bingMapsKey}/>

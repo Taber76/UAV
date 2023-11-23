@@ -9,7 +9,7 @@ function HorizonPitchScale() {
     };
     lines.push(
       <div className='pitchLine' style={lineStyle} key={i}>
-        {i}°
+        {-i}°
       </div>
     );
   }

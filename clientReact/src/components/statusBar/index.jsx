@@ -5,7 +5,7 @@ import DropdownButton from "../dropdownButton";
 import StatusDisplay from "../statusDisplay";
 import './styles.css';
 
-import { connected, disconnect, setPosition } from "../../store/uavSlice";
+import { connected, disconnect, setPosition, setPitchAndRoll } from "../../store/uavSlice";
 import { getUavInfo, getUavList } from "../../services/uavService";
 
 const StatusBar = () => {
@@ -49,6 +49,10 @@ const StatusBar = () => {
           
         }
         */
+        const uavPichAndRoll = await getUavInfo(uav.uavname, 'ATTITUDE');
+        if (uavPichAndRoll.valid) {
+          dispatch(setPitchAndRoll(uavPichAndRoll.data.message));
+        }
         const uavPostion = await getUavInfo(uav.uavname, 'position');
         if (uavPostion.valid) {
           dispatch(setPosition(uavPostion.data));

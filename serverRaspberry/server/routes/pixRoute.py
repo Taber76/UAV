@@ -37,6 +37,17 @@ async def post_uav_msg_route():
 
 '''
 POST MESSAGE TYPES
+
+    Response ex:
+    "message": {
+        "command": 400,
+        "mavpackettype": "COMMAND_ACK",
+        "progress": 0,
+        "result": 0,
+        "result_param2": 0,
+        "target_component": 0,
+        "target_system": 255
+    },
     
     ARM / DISARM
         MAV_CMD_COMPONENT_ARM_DISARM

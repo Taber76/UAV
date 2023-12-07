@@ -81,7 +81,7 @@ const MapComponent = () => {
               ]}
             >
               <Popup>
-                <span>Tramo {idx}, distancia {position.dist.toFixed(2)}Km</span>
+                <span>Tramo {idx} -- {position.dist.toFixed(2)}Km</span>
               </Popup>
             </Polyline>
           )}

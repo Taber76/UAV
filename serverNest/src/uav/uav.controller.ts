@@ -140,9 +140,9 @@ export class UavController {
         data.password,
       );
       if (response.response === true) {
-        const newUAVInsance = new UAV(data.uavname, "http://192.168.1.11:8080")//ip) //,data.jwt);
+        const newUAVInsance = new UAV(data.uavname, "http://192.168.1.17:8080")//ip) //,data.jwt);
         this.uavInstances[data.uavname] = newUAVInsance;
-        this.globalService.uavUrl = "http://192.168.1.11:8080" //ip;
+        this.globalService.uavUrl = "http://192.168.1.17:8080" //ip;
         this.globalService.uavName = data.uavname;
         return { response: true };
       } else {

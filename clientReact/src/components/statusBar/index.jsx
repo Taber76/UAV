@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DropdownButton from "../dropdownButton";
+import ActionButton from "../actionButton";
 import StatusDisplay from "../statusDisplay";
 import './styles.css';
 
@@ -27,14 +28,14 @@ const StatusBar = () => {
   }
 
   // Obtengo lista de UAVs conectados al servidor
-  useEffect(() => { 
+  useEffect(() => {
     async function fetchUavList() {
       const response = await getUavList();
       if (response.status === 200) {
         response.data.Unselected = {}
         setUavList(response.data)
       }
-      return 
+      return
     }
     fetchUavList()
   }, [])
@@ -50,6 +51,7 @@ const StatusBar = () => {
         }
         */
         const uavPichAndRoll = await getUavInfo(uav.uavname, 'ATTITUDE');
+        console.log(uavPichAndRoll)
         if (uavPichAndRoll.valid) {
           dispatch(setPitchAndRoll(uavPichAndRoll.data.message));
         }
@@ -58,19 +60,23 @@ const StatusBar = () => {
           dispatch(setPosition(uavPostion.data));
         }
         return;
-      }   
+      }
       return
     }
-    const interval = setInterval(fetchUavStatus, 2000) 
-      return () => {
+    const interval = setInterval(fetchUavStatus, 2000)
+    return () => {
       clearInterval(interval)
     }
   }, [uav.connected]);
-  
+
 
   return (
     <div className="statusBar">
-      <div></div>
+      <div className="flex px-4 w-full justify-between">
+        <ActionButton type="button" name="Arm" buttonWidth={'70px'} textSize={'12px'} active={true} onClick={() => console.log('Arm clicked')} />
+        <ActionButton type="button" name="Takeoff" buttonWidth={'70px'} textSize={'12px'} active={false} onClick={() => console.log('Takeoff clicked')} />
+        <ActionButton type="button" name="Land" buttonWidth={'70px'} textSize={'12px'} active={false} onClick={() => console.log('Land clicked')} />
+      </div>
       <div></div>
       <div>
         <DropdownButton

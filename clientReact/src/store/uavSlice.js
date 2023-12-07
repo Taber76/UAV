@@ -110,8 +110,8 @@ export const { select, connecting, connected, arm, disconnect, setUrl, setPositi
 export default uavSlice.reducer;
 
 
-// -------------- Funciones auxiliares ----------------
 
+// -------------- Funciones auxiliares ----------------
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371; // Radio de la Tierra en kilómetros
   const dLat = (lat2 - lat1) * (Math.PI / 180);
